@@ -1,0 +1,18 @@
+- hosts: all
+  become: yes
+  name: container-setup
+  vars:
+    prometheus_config_file: ./prometheus.yml
+    prometheus_storage_retention: 60d
+    node_exporter_enabled_collectors: ["cpu.info"]
+    cadvisor_port: 8088
+    # node_exporter_enabled_collectors: ["systemd", {"textfile": {"directory": "{{ node_exporter_textfile_dir }}"}}]
+  roles:
+    - common
+    - docker
+    - prometheus.prometheus.prometheus
+    - prometheus.prometheus.node_exporter
+    - prometheus.prometheus.systemd_exporter
+    - prometheus.prometheus.cadvisor
+    - grafana
+    - loki
